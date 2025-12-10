@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TX_Curr Trends Analysis | HRH & Budget Cuts Impact</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1a5fb4 0%, #1c71d8 100%);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: rgba(255, 255, 255, 0.3);
+            z-index: 1;
+        }
+        
+        .timeline-point {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+        
+        .timeline-point i {
+            background-color: #1c71d8;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            border: 5px solid white;
+        }
+        
+        .timeline-point.stable i {
+            background-color: #26a269;
+        }
+        
+        .timeline-point.crisis i {
+            background-color: #c01c28;
+        }
+        
+        .timeline-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .timeline-date {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        
+        .data-container {
+            padding: 30px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .data-table th {
+            background-color: #f0f5ff;
+            color: #1a5fb4;
+            padding: 18px 15px;
+            text-align: center;
+            font-weight: 700;
+            border-bottom: 2px solid #dce1f0;
+        }
+        
+        .data-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .data-table tr:hover {
+            background-color: #f9fafd;
+        }
+        
+        .highlight-baseline {
+            background-color: #e8f5e9 !important;
+            font-weight: 600;
+        }
+        
+        .highlight-crisis {
+            background-color: #ffebee !important;
+        }
+        
+        .change-positive {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        
+        .change-positive:before {
+            content: "↑ ";
+        }
+        
+        .change-negative {
+            color: #c62828;
+            font-weight: 600;
+        }
+        
+        .change-negative:before {
+            content: "↓ ";
+        }
+        
+        .facility-name {
+            font-weight: 600;
+            text-align: left;
+            color: #1a237e;
+        }
+        
+        .insights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .insight-card {
+            background-color: #f8f9ff;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            border-left: 5px solid #1a5fb4;
+        }
+        
+        .insight-card.critical {
+            border-left-color: #c01c28;
+        }
+        
+        .insight-card.positive {
+            border-left-color: #26a269;
+        }
+        
+        .insight-card h3 {
+            color: #1a5fb4;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .insight-card.critical h3 {
+            color: #c01c28;
+        }
+        
+        .insight-card.positive h3 {
+            color: #26a269;
+        }
+        
+        .insight-card h3 i {
+            margin-right: 10px;
+        }
+        
+        .summary {
+            background-color: #f0f7ff;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .summary h2 {
+            color: #1a5fb4;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #dce1f0;
+            padding-bottom: 10px;
+        }
+        
+        .key-points {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .key-point {
+            background-color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            flex: 1;
+            min-width: 200px;
+            border-top: 4px solid #1a5fb4;
+        }
+        
+        .key-point.critical {
+            border-top-color: #c01c28;
+        }
+        
+        .key-point.positive {
+            border-top-color: #26a269;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .data-container {
+                padding: 15px;
+                overflow-x: auto;
+            }
+            
+            .data-table {
+                font-size: 0.85rem;
+            }
+            
+            .timeline {
+                flex-direction: column;
+                gap: 25px;
+            }
+            
+            .timeline:before {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TX_Curr Trends Analysis</h1>
+            <div class="subtitle">Impact of HRH & Budget Cuts on HIV Treatment Continuity</div>
+            
+            <div class="timeline">
+                <div class="timeline-point stable">
+                    <i class="fas fa-balance-scale"></i>
+                    <div class="timeline-label">Stable Baseline</div>
+                    <div class="timeline-date">Dec 2024</div>
+                </div>
+                <div class="timeline-point">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="timeline-label">Monitoring Period</div>
+                    <div class="timeline-date">Mar-Sep 2025</div>
+                </div>
+                <div class="timeline-point crisis">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="timeline-label">Post-Cuts Crisis</div>
+                    <div class="timeline-date">Oct 2025</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="data-container">
+            <h2 style="color: #1a5fb4; margin-bottom: 20px; display: flex; align-items: center;">
+                <i class="fas fa-table" style="margin-right: 10px;"></i> Facility Performance Data
+            </h2>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Sno</th>
+                        <th>Facility Name</th>
+                        <th class="highlight-baseline">Dec-24 (Baseline)</th>
+                        <th>Mar-25</th>
+                        <th>Jun-25</th>
+                        <th>Sep-25</th>
+                        <th class="highlight-crisis">Oct-25 (Post-Cuts)</th>
+                        <th>Post Stop Work Order<br><small>Dec-24 to Sep-25</small></th>
+                        <th class="highlight-crisis">Post HRH Cuts<br><small>Sep-25 to Oct-25</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td class="facility-name">Bomu Medical Hospital (Changamwe)</td>
+                        <td class="highlight-baseline">12,675</td>
+                        <td>12,320</td>
+                        <td>12,396</td>
+                        <td>12,305</td>
+                        <td class="highlight-crisis">12,366</td>
+                        <td class="change-negative">-355</td>
+                        <td class="change-positive">61</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td class="facility-name">Port Reitz Hospital</td>
+                        <td class="highlight-baseline">1,808</td>
+                        <td>1,809</td>
+                        <td>1,818</td>
+                        <td>1,838</td>
+                        <td class="highlight-crisis">1,844</td>
+                        <td class="change-positive">1</td>
+                        <td class="change-positive">6</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td class="facility-name">CPGH</td>
+                        <td class="highlight-baseline">4,244</td>
+                        <td>4,159</td>
+                        <td>4,177</td>
+                        <td>4,181</td>
+                        <td class="highlight-crisis">4,214</td>
+                        <td class="change-negative">-85</td>
+                        <td class="change-positive">33</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td class="facility-name">Likoni SCH</td>
+                        <td class="highlight-baseline">1,577</td>
+                        <td>1,573</td>
+                        <td>1,514</td>
+                        <td>1,556</td>
+                        <td class="highlight-crisis">1,560</td>
+                        <td class="change-negative">-4</td>
+                        <td class="change-positive">4</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td class="facility-name">Mrima Hospital</td>
+                        <td class="highlight-baseline">682</td>
+                        <td>677</td>
+                        <td>689</td>
+                        <td>688</td>
+                        <td class="highlight-crisis">692</td>
+                        <td class="change-negative">-5</td>
+                        <td class="change-positive">4</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td class="facility-name">Coptic</td>
+                        <td class="highlight-baseline">10,164</td>
+                        <td>10,266</td>
+                        <td>10,484</td>
+                        <td>10,372</td>
+                        <td class="highlight-crisis">10,339</td>
+                        <td class="change-positive">102</td>
+                        <td class="change-negative">-33</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td class="facility-name">Kenyatta National Hospital</td>
+                        <td class="highlight-baseline">9,531</td>
+                        <td>9,578</td>
+                        <td>9,653</td>
+                        <td>9,625</td>
+                        <td class="highlight-crisis">9,618</td>
+                        <td class="change-positive">47</td>
+                        <td class="change-negative">-7</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td class="facility-name">Moi Teaching Referral (Eldoret)</td>
+                        <td class="highlight-baseline">14,075</td>
+                        <td>13,961</td>
+                        <td>14,040</td>
+                        <td>14,039</td>
+                        <td class="highlight-crisis">14,007</td>
+                        <td class="change-negative">-114</td>
+                        <td class="change-negative">-32</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td class="facility-name">JOTRH (Kisumu)</td>
+                        <td class="highlight-baseline">6,757</td>
+                        <td>6,762</td>
+                        <td>6,799</td>
+                        <td>6,807</td>
+                        <td class="highlight-crisis">6,765</td>
+                        <td class="change-positive">5</td>
+                        <td class="change-negative">-42</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="insights">
+                <div class="insight-card critical">
+                    <h3><i class="fas fa-exclamation-circle"></i> Critical Findings</h3>
+                    <p><strong>6 out of 9 facilities</strong> showed immediate net losses after HRH cuts (Sep-25 to Oct-25).</p>
+                    <p>Major referral centers (Moi Teaching Referral and JOTRH) experienced the most significant declines.</p>
+                    <p>Coptic Hospital reversed from +102 gains to -33 losses immediately post-cuts.</p>
+                </div>
+                
+                <div class="insight-card positive">
+                    <h3><i class="fas fa-thumbs-up"></i> Resilience Examples</h3>
+                    <p><strong>Port Reitz Hospital</strong> consistently gained patients (+7 total) despite challenges.</p>
+                    <p><strong>Bomu Medical</strong> recovered from initial losses, adding 61 patients after Sep-25.</p>
+                    <p>3 facilities showed ability to grow even after HRH cuts.</p>
+                </div>
+                
+                <div class="insight-card">
+                    <h3><i class="fas fa-chart-bar"></i> Overall Impact</h3>
+                    <p><strong>Cumulative net loss: -287 patients</strong> across all facilities from baseline.</p>
+                    <p>5/9 facilities ended with net losses compared to Dec-24 baseline.</p>
+                    <p>Data suggests referral hospitals are most vulnerable to HRH cuts.</p>
+                </div>
+            </div>
+            
+            <div class="summary">
+                <h2><i class="fas fa-clipboard-list"></i> Key Analysis Summary</h2>
+                <p>The data reveals that while some facilities showed resilience initially, system-wide HRH and budget cuts in FY26Q1 have begun to undermine TX_Curr stability across most facilities. The immediate post-cut period (Sep-25 to Oct-25) shows concerning reversals in facilities that were previously gaining patients.</p>
+                
+                <div class="key-points">
+                    <div class="key-point critical">
+                        <strong><i class="fas fa-arrow-down"></i> Most Vulnerable:</strong> MTRH (-146 total), JOTRH (-37), Coptic (+69 to +36)
+                    </div>
+                    <div class="key-point positive">
+                        <strong><i class="fas fa-arrow-up"></i> Most Resilient:</strong> Port Reitz (+7), Bomu (+61 after Sep)
+                    </div>
+                    <div class="key-point">
+                        <strong><i class="fas fa-clock"></i> Data Lag Concern:</strong> Oct-25 may not yet reflect full impact
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Report Done by: Peter Njoka (M&E Manager): TX_Curr Trends Analysis | Data as of October 2025 | Analysis generated from facility-reported data</p>
+            <p style="margin-top: 10px; font-size: 0.8rem;">Note: Dec-24 represents stable baseline before funding cuts. Oct-25 data reflects post-HRH/budget cuts period.</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Add interactivity to table rows
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableRows = document.querySelectorAll('.data-table tbody tr');
+            
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f0f5ff';
+                });
+                
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+            
+            // Add animation to key points
+            const keyPoints = document.querySelectorAll('.key-point');
+            keyPoints.forEach((point, index) => {
+                point.style.animationDelay = `${index * 0.1}s`;
+                point.style.animation = 'fadeInUp 0.5s ease-out forwards';
+                point.style.opacity = '0';
+            });
+            
+            // Add CSS animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
